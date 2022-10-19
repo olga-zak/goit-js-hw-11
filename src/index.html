@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 11</title>
-</head>
-<body>
-    
-</body>
+    <link rel="stylesheet" href="./sass/index.scss" />
+  </head>
+  <body>
+    <header>
+      <form class="search-form" id="search-form">
+        <!-- <input type="search"> VS <input type="text">: type="search" добавлено в стандарт HTML5 и является семантической подсказкой для браузеров. Все браузеры, кроме Mozilla Firefox, добавляют крестик очистки в поле -->
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">
+          <svg class="icon-search" width="24" height="24">
+            <use href="./images/sprite.svg#icon-search"></use>
+          </svg>
+        </button>
+      </form>
+    </header>
+    <p>test</p>
+    <script src="./index.js" type="module"></script>
+  </body>
 </html>

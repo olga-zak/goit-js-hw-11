@@ -1,0 +1,13 @@
+@import '~node_modules/modern-normalize/modern-normalize.css';
+p {
+  color: red;
+}
+
+header {
+  width: 100vh;
+  height: 80px;
+  background-color: #5689b8;
+  position: fixed;
+  top: 0;
+  left: 0;
+}/*# sourceMappingURL=index.css.map */
