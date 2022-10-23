@@ -1,0 +1,15 @@
+.info {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid red;
+  border-top: 0;
+}
+.info-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+}
+.photo-card img {
+  display: block;
+}
