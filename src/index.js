@@ -1,95 +1,117 @@
 'use strict';
-//console.log(2);
+
 //const axios = require('axios');
 const axios = require('axios').default;
-//import simpleLightbox from 'simplelightbox';
-//import 'simplelightbox/dist/simple-lightbox.min.css';
+import Notiflix from 'notiflix';
+import simpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const formRef = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
+const loadMoreText = document.querySelector('.button-span');
 
-//const searchBtnRef = document.querySelector('.search-btn'); //повесить на форму слушателя сабмит??
-
-// HTTP - запросы
-// В качестве бэкенда используй публичный API сервиса Pixabay https://pixabay.com/api/docs/
-//     Зарегистрируйся, получи свой уникальный ключ доступа ( 30721713-dc13b7587189df7eaf911ae19 ) и ознакомься с документацией.
-// Список параметров строки запроса которые тебе обязательно необходимо указать:
-//    + key - твой уникальный ключ доступа к API.
-//     q - термин для поиска.То, что будет вводить пользователь.
-//    + image_type - тип изображения.Мы хотим только фотографии, поэтому задай значение photo.
-//    + orientation - ориентация фотографии.Задай значение horizontal.
-//    + safesearch - фильтр по возрасту.Задай значение true.
-// В ответе будет массив изображений удовлетворивших критериям параметров запроса.
-// Каждое изображение описывается объектом, из которого тебе интересны только следующие свойства:
-//     + webformatURL - ссылка на маленькое изображение для списка карточек.
-//     + largeImageURL - ссылка на большое изображение.
-//     + tags - строка с описанием изображения.Подойдет для атрибута alt.
-//     + likes - количество лайков.
-//     + views - количество просмотров.
-//     + comments - количество комментариев.
-//     + downloads - количество загрузок.
-// Если бэкенд возвращает пустой массив, значит ничего подходящего найдено небыло.В таком случае показывай
-// уведомление с текстом "Sorry, there are no images matching your search query. Please try again.".
-// Для уведомлений используй библиотеку notiflix. https://github.com/notiflix/Notiflix#readme
-
-// https://pixabay.com/api/?key=30721713-dc13b7587189df7eaf911ae19&q=yellow+flowers&image_type=photo&pretty=true
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '30721713-dc13b7587189df7eaf911ae19';
 
 let pageToFetch = 1;
 let searchword = '';
-//const params =
-//  '&q=yellow+flowers&image_type=photo&orientation=horizontal&safesearch=true'; //yellow+flowers &q=yellow+flowers - это то что пользователь вводит в поиск !!! если 2 и более слов, то через + написаны
-function fetchImages(page, searchword) {
-  const params = new URLSearchParams({
-    q: searchword,
-    per_page: 50,
-    page: page,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
+
+async function fetchImages(page, searchword) {
+  // const params = new URLSearchParams({
+  //   q: searchword,
+  //   per_page: 50,
+  //   page: page,
+  //   image_type: 'photo',
+  //   orientation: 'horizontal',
+  //   safesearch: true,
+  // });
+  // const response = await fetch(`${BASE_URL}?key=${API_KEY}&${params}`);
+  const response = await axios.get(`${BASE_URL}?key=${API_KEY}`, {
+    params: {
+      q: searchword,
+      per_page: 40,
+      page: page,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+    },
   });
-  return fetch(`${BASE_URL}?key=${API_KEY}&${params}`)
-    .then(response => {
-      if (!response.ok) {
-        console.log('error mfk');
-        throw new Error(response.status);
-      }
-      return response.json(); //Promise
-    })
-    .catch(error => console.log(error));
+
+  //if (!response.ok) {
+  if (response.status !== 200) {
+    console.log('error mfk');
+    throw new Error(response.status);
+  }
+
+  const images = await response.data;
+  return images;
+
+  // return fetch(`${BASE_URL}?key=${API_KEY}&${params}`)
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       console.log('error mfk');
+  //       throw new Error(response.status);
+  //     }
+  //     return response.json(); //Promise
+  //   })
+  //   .catch(error => console.log(error));
 }
 
-function getImages(page, searchword) {
-  fetchImages(page, searchword).then(data => {
-    console.log(data.hits);
-    console.log(data.hits.length);
+// function getImages(page, searchword) {
+//   fetchImages(page, searchword).then(data => {
+//     if (data.hits.length === 0) {
+//       loadMoreBtn.classList.add('invisible');
+//     }
 
-    // const images = data.hits;
+//     const images = data.hits;
+//     renderImages(images);
+//     if (pageToFetch === Math.ceil(data.totalHits / 50)) {
+//       loadMoreBtn.classList.add('invisible');
+//       return;
+//     }
 
-    //если вбить котиков, а потом абракадабру, то кнопка loadMoreBtn остаётся -- убрать бы надо
-    //убирается, но перед этим на мгновение появляется --- исправить бы
+//     pageToFetch += 1;
+
+//     if (data.totalHits / 50 > 1) {
+//       loadMoreBtn.classList.remove('invisible');
+//     }
+//   });
+// }
+
+async function getImages(page, searchword) {
+  try {
+    const data = await fetchImages(page, searchword);
+    if (page === 1 && data.totalHits !== 0) {
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+    }
     if (data.hits.length === 0) {
       loadMoreBtn.classList.add('invisible');
-      // return;
+      loadMoreText.classList.add('invisible');
+      Notiflix.Notify.failure(
+        `Sorry, there are no images matching your search ${searchword}. Please try again.`
+      );
     }
     const images = data.hits;
     renderImages(images);
-
-    if (pageToFetch === Math.ceil(data.totalHits / 50)) {
+    new simpleLightbox('.gallery a').refresh();
+    if (pageToFetch === Math.ceil(data.totalHits / 40)) {
       loadMoreBtn.classList.add('invisible');
+      loadMoreText.classList.add('invisible');
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
       return;
     }
-
     pageToFetch += 1;
-
-    if (data.totalHits / 50 > 1) {
+    if (data.totalHits / 40 > 1) {
       loadMoreBtn.classList.remove('invisible');
+      loadMoreText.classList.remove('invisible');
     }
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
-//baby doll запрос выдаёт 122 картинки.
 
 function renderImages(images) {
   const markup = images
@@ -103,7 +125,7 @@ function renderImages(images) {
         comments,
         downloads,
       }) => {
-        return `
+        return `<a href="${largeImageURL}">
         <div class="photo-card">
   <img src="${webformatURL}" alt="${tags}" width=320 height=213 loading="lazy" />
   <div class="info">
@@ -120,7 +142,7 @@ function renderImages(images) {
       <b>Downloads</b>${downloads}
     </p>
   </div>
-</div>`;
+</div></a>`;
       }
     )
     .join('');
@@ -128,6 +150,7 @@ function renderImages(images) {
 }
 
 formRef.addEventListener('submit', onFormSubmit);
+
 function onFormSubmit(event) {
   event.preventDefault();
   const query = event.target.elements.searchQuery.value;
@@ -135,8 +158,9 @@ function onFormSubmit(event) {
   pageToFetch = 1;
   galleryRef.innerHTML = '';
   //if(!query) то же самое что и if (query === '')
-  if (query === '') {
-    //loadMoreBtn.classList.add('invisible');
+  if (query === '' || query.match(/\s/)) {
+    loadMoreBtn.classList.add('invisible');
+    loadMoreText.classList.add('invisible');
     return;
   }
   getImages(pageToFetch, query);

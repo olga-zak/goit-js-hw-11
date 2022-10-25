@@ -1,13 +1,156 @@
+@charset "UTF-8";
 @import '~node_modules/modern-normalize/modern-normalize.css';
-p {
-  color: red;
+.container {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
+@media screen and (min-width: 480px) {
+  .container {
+    width: 480px;
+    margin: 0 auto;
+  }
+}
+@media screen and (min-width: 768px) {
+  .container {
+    width: 768px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+}
 header {
-  width: 100vh;
-  height: 80px;
+  width: 100%;
+  height: 100px;
   background-color: #5689b8;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
+}
+
+.search-form {
+  padding: 30px 0;
+  position: relative;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.search-form input {
+  width: 200px;
+  height: 40px;
+  padding-left: 25px;
+  padding-right: 50px;
+  border-radius: 42px;
+  border: 2px solid #e6f7f9;
+  background: #f6f8f9;
+  outline: none;
+  position: relative;
+  transition: 0.3s linear;
+}
+.search-form input:focus {
+  width: 250px;
+}
+.search-form input:hover {
+  width: 250px;
+}
+
+.search-form button {
+  width: 35px;
+  height: 35px;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 35px;
+  right: 60px;
+  cursor: pointer;
+}
+
+.icon-search {
+  fill: #5689b8;
+}
+
+.gallery {
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 130px;
+  display: flex;
+}
+
+.info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+}
+
+.photo-card img {
+  display: block;
+}
+
+.gallery a {
+  color: #1c6bb5;
+  text-decoration: none;
+  transition: transform 0.25s linear, box-shadow 0.25s linear;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.06), 1px 4px 6px rgba(0, 0, 0, 0.16);
+}
+
+.gallery a:hover {
+  transform: scale(1.03);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.12), 1px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button {
+  display: block;
+  border-radius: 42px;
+  background-color: #5689b8;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 17px;
+  padding: 10px;
+  width: 200px;
+  height: 40px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 30px auto;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: "»";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.invisible {
+  display: none;
 }/*# sourceMappingURL=index.css.map */
